@@ -1,3 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from .models import Recipe, Category
 
-# Create your views here.
+
+def main(request):
+    recipes = Recipe.objects.order_by('?')[:10]
+    return render(request, 'main.html', {'recipes': recipes})
+
+
+def category_detail(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    recipes = category.recipes.all()
+    return render(request, 'category_detail.html', {
+        'category': category,
+        'recipes': recipes
+    })
